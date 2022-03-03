@@ -17,13 +17,13 @@ public class Main {
         for(int i = 0; i < peopleToleranceStr.length; i++) {
             peopleTolerance[i] = Integer.parseInt(peopleToleranceStr[i]);
         }
-//        long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         int[] result = solution(peopleTolerance, days);
         for(int i = 0; i < result.length; i++) {
             System.out.println(result[i]);
         }
-//        long endTime = System.currentTimeMillis();
-//        System.out.println("Time: "+ (endTime-startTime));
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time: "+ (endTime-startTime));
     }
 
     public static int[] solution(int[] peopleTolerance, int[] daysTemperature) {
