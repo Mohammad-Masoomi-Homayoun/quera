@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Main {
 
@@ -11,32 +10,23 @@ public class Main {
     public void readAndSolve() {
 
         Scanner in = new Scanner(System.in);
-        String line = in.nextLine();
-        String[] lineArray = line.split(" ");
-
-        int n = Integer.parseInt(lineArray[0]);
-
-        int[] array = Stream.of(in.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-//        long startTime = System.currentTimeMillis();
-        String result = solve(array);
+        int n = in.nextInt();
+        int result = solve(n);
         System.out.println(result);
-//        long endTime = System.currentTimeMillis();
-//        System.out.println("Time: "+ (endTime-startTime));
     }
 
-    public String solve(int[] array) {
+    public int solve(int n) {
 
-        int rampCount = 0;
-        int rampValue = 0;
-        for (int i = 1; i < array.length; i++) {
-            int newRampValue = array[i] - array[i-1];
-            if (rampValue * newRampValue < 0) {
-                rampCount++;
-                newRampValue = 0;
+        int count = 0;
+        for (int a = 1;  a < n; a++) {
+            for(int b=a; b <=n-a ; b++) {
+                int c = n - a - b;
+                if(a + b > c && c >=b) {
+                    count++;
+                }
             }
-            rampValue = newRampValue;
         }
 
-        return rampCount == 2 ? "YES" : "NO";
+        return count;
     }
 }
