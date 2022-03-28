@@ -15,27 +15,28 @@ public class Main {
         String[] lineArray = line.split(" ");
 
         int n = Integer.parseInt(lineArray[0]);
-        int k = Integer.parseInt(lineArray[1]);
 
         int[] array = Stream.of(in.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 //        long startTime = System.currentTimeMillis();
-        int result = solve(k, array);
+        String result = solve(array);
         System.out.println(result);
 //        long endTime = System.currentTimeMillis();
 //        System.out.println("Time: "+ (endTime-startTime));
     }
 
-    public int solve(int k, int[] array) {
-        int max = 50000000;
-        int[] result = new int[2 * max + 1];
-        int cost;
-        for (int a0 = -max; a0 <= max; a0++) {
-            cost = 0;
-            for (int i = 1; i <= array.length; i++) {
-                cost += Math.abs(a0 + (i - 1) * k - array[i - 1]);
+    public String solve(int[] array) {
+
+        int rampCount = 0;
+        int rampValue = 0;
+        for (int i = 1; i < array.length; i++) {
+            int newRampValue = array[i] - array[i-1];
+            if (rampValue * newRampValue < 0) {
+                rampCount++;
+                newRampValue = 0;
             }
-            result[a0 + max] = cost;
+            rampValue = newRampValue;
         }
-        return Arrays.stream(result).min().getAsInt();
+
+        return rampCount == 2 ? "YES" : "NO";
     }
 }

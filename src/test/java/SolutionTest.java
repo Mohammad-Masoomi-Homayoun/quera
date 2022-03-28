@@ -14,6 +14,7 @@ public class SolutionTest {
 
     @Test
     public void test() {
-        assertEquals(2, solution.solve(1, new int[]{1,3,5}));
+        assertEquals("YES", solution.solve(new int[]{5, 2, 3, 4, 1}));
+        assertEquals("NO", solution.solve( new int[]{1,2,4,5,3}));
     }
 }
