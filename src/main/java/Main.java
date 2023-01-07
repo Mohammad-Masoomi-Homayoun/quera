@@ -11,33 +11,33 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
-        long k = in.nextLong();
         long[] arr = new long[n];
         for(int i=0; i < n; i++)
             arr[i] = in.nextLong();
-        long result = solve(k, arr);
+        long result = solve(n, arr);
         System.out.println(result);
 
     }
 
-    public long solve(long k,long[] arr) {
+    public long solve(long n,long[] arr) {
 
-        long M = 0;
-        int length = arr.length;
-        long[] b = new long[length];
+        long max = -1 * Long.MAX_VALUE;
 
-        for(int i=0; i<length; i++)
-            b[i] = arr[i] - (((long)i) *k);
-        Arrays.sort(b);
-        if(length % 2 ==0) {
-            M = b[(length / 2)-1];
-        } else {
-            M = b[((length+1) / 2)-1];
+        int l, r;
+
+        long sum = 0;
+        for(r=0; r<n; r++) {
+            for(l=0; l<=r; l++) {
+                for(int j =l; j<=r; j++) {
+                    sum += arr[j];
+                }
+                if(sum > max) {
+                    max = sum;
+                }
+                sum =0;
+            }
         }
-        long cost = 0;
-        for(int i=0; i<length; i++)
-            cost += Math.abs(b[i]-M);
 
-        return cost;
+        return max;
     }
 }
