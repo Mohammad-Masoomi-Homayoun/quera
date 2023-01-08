@@ -10,34 +10,24 @@ public class Main {
     public void readAndSolve() {
 
         Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        long[] arr = new long[n];
-        for(int i=0; i < n; i++)
-            arr[i] = in.nextLong();
-        long result = solve(n, arr);
+        long n = in.nextLong();
+        long result = solve(n);
         System.out.println(result);
 
     }
 
-    public long solve(long n,long[] arr) {
+    public long solve(long n) {
 
-        long max = -1 * Long.MAX_VALUE;
-
-        int l, r;
-
-        long sum = 0;
-        for(r=0; r<n; r++) {
-            for(l=0; l<=r; l++) {
-                for(int j =l; j<=r; j++) {
-                    sum += arr[j];
-                }
-                if(sum > max) {
-                    max = sum;
-                }
-                sum =0;
-            }
+        long triangleCount = 0;
+        for(int a = 1; a <= n/3; a++) {
+            triangleCount += ((n-(3*a))/2) - (max(0, ((n/2)-(2*a)+1))) + 1;
         }
+        return triangleCount;
+    }
 
-        return max;
+    private long max(long a, long b) {
+        if(a >= b)
+            return a;
+        return b;
     }
 }

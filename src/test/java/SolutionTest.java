@@ -17,8 +17,7 @@ public class SolutionTest {
     @Test
     @DisplayName("test solution")
     public void test() {
-        assertEquals(4, solution.solve(6, new long[]{-7, 3, -1, 2, -4, 3}));
-        assertEquals(-1, solution.solve(3, new long[]{-1, -2, -3}));
-
+        assertEquals(3, solution.solve(12));
+        assertEquals(126841016, solution.solve(78028));
     }
 }
