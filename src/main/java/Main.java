@@ -11,33 +11,33 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
+//        long x = in.nextLong();
         long[] arr = new long[n];
         for(int i=0; i<n; i++) {
             arr[i] = in.nextLong();
         }
-        long[] result = solve(n, arr);
-        for(int i=0; i<n; i++) {
-            System.out.print(result[i] + " ");
-        }
+        long result = solve(n, arr);
+        System.out.println(result);
+
     }
 
-    public long[] solve(int n, long[] arr) {
+    public long solve(int n, long[] arr) {
 
-        for(int i=0; i<n; i++) {
-            int minIndex = i;
-            for(int j = i; j<n; j++) {
-                if(arr[j] < arr[minIndex])
-                    minIndex = j;
-            }
-            swap(arr, minIndex, i);
+        long remain = 0;
+        long maxsum = arr[0];
+
+        long ans = arr[0];
+        for(int i=1; i<=n; i++) {
+            maxsum = max(arr[i], arr[i] + maxsum);
+            ans = max(ans, maxsum);
         }
-        return arr;
+        return remain;
     }
 
-    public void swap(long[] arr, int minIndex, int i) {
-        long temp = arr[i];
-        arr[i] = arr[minIndex];
-        arr[minIndex] = temp;
+    public long max(long a, long b) {
+        if(a >= b)
+            return a;
+        return b;
     }
 
 }
