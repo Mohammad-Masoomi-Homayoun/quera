@@ -11,33 +11,28 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
-//        long x = in.nextLong();
-        long[] arr = new long[n];
-        for(int i=0; i<n; i++) {
+        long x = in.nextLong();
+        long[] arr = new long[n+1];
+        for(int i=0; i<=n; i++) {
             arr[i] = in.nextLong();
         }
-        long result = solve(n, arr);
+        long result = solve(n, x, arr);
         System.out.println(result);
 
     }
 
-    public long solve(int n, long[] arr) {
+    public long solve(int n, long x, long[] arr) {
 
         long remain = 0;
-        long maxsum = arr[0];
+        long mod = 1000_000_000 + 7;
 
-        long ans = arr[0];
-        for(int i=1; i<=n; i++) {
-            maxsum = max(arr[i], arr[i] + maxsum);
-            ans = max(ans, maxsum);
+        for(int i=n; i>=0; i--) {
+            remain = (remain * x + arr[i]) % mod;
         }
-        return remain;
-    }
 
-    public long max(long a, long b) {
-        if(a >= b)
-            return a;
-        return b;
+        if(remain < 0)
+            return remain + mod;
+        return remain;
     }
 
 }

@@ -18,7 +18,8 @@ public class SolutionTest {
     @Test
     @DisplayName("test solution")
     public void test() {
-        assertEquals( 4, solution.solve(6, new long[]{-7, 3, -1, 2, -4, 3}));
-        assertEquals( -1, solution.solve(3, new long[]{-1, -2, -3}));
+        assertEquals( 11, solution.solve(2, 5, new long[]{1, -3, 1}));
+        assertEquals( 17, solution.solve(2, 2, new long[]{1, 2, 3}));
+        assertEquals( 1000000005, solution.solve(1, -5, new long[]{-2, 0}));
     }
 }
