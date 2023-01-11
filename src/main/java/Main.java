@@ -10,29 +10,41 @@ public class Main {
     public void readAndSolve() {
 
         Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        long x = in.nextLong();
-        long[] arr = new long[n+1];
-        for(int i=0; i<=n; i++) {
-            arr[i] = in.nextLong();
-        }
-        long result = solve(n, x, arr);
+        long a = in.nextLong();
+        long b = in.nextLong();
+        long result = solve(a, b);
         System.out.println(result);
 
     }
 
-    public long solve(int n, long x, long[] arr) {
+    public long solve2(long a, long b) {
 
-        long remain = 0;
-        long mod = 1000_000_000 + 7;
+        if(a <=1 || b <= 1)
+            return 1;
 
-        for(int i=n; i>=0; i--) {
-            remain = (remain * x + arr[i]) % mod;
+        if(a > b) {
+            if(a%b == 0)
+                return b;
+            else
+                return solve(b, a-b);
+        } else {
+            if(b%a == 0)
+                return a;
+            else
+                return solve(a, b-a);
         }
-
-        if(remain < 0)
-            return remain + mod;
-        return remain;
     }
+
+    public long solve(long a, long b) {
+
+        if(b == 0)
+            return 1;
+
+        if(a%b == 0)
+            return b;
+        return solve2(b, a%b);
+    }
+
+
 
 }
