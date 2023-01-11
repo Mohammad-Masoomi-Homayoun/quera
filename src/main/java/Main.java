@@ -10,41 +10,24 @@ public class Main {
     public void readAndSolve() {
 
         Scanner in = new Scanner(System.in);
-        long a = in.nextLong();
-        long b = in.nextLong();
-        long result = solve(a, b);
-        System.out.println(result);
-
+        int n = in.nextInt();
+        solve('A', 'B', 'C', n);
     }
 
-    public long solve2(long a, long b) {
+    int count = 1;
+    public void solve(char from, char to, char help, int n) {
 
-        if(a <=1 || b <= 1)
-            return 1;
 
-        if(a > b) {
-            if(a%b == 0)
-                return b;
-            else
-                return solve(b, a-b);
-        } else {
-            if(b%a == 0)
-                return a;
-            else
-                return solve(a, b-a);
+        if(n == 1) {
+            System.out.println(String.format("%d %c %c", count++, from, to));
+            return;
         }
+
+        solve(from, help, to, n-1);
+
+        System.out.println(String.format("%d %c %c", count++, from, to));
+
+        solve(help, to, from, n-1);
+
     }
-
-    public long solve(long a, long b) {
-
-        if(b == 0)
-            return 1;
-
-        if(a%b == 0)
-            return b;
-        return solve2(b, a%b);
-    }
-
-
-
 }
