@@ -1,3 +1,5 @@
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Main {
@@ -15,28 +17,32 @@ public class Main {
     }
 
     public void solve(int n) {
-        gray(n).forEach(str -> System.out.println(str));
+        List<StringBuilder> result = dictionary(n, 0);
+        OutputStream outputStream = System.out;
+        PrintWriter out = new PrintWriter(outputStream);
+        for(StringBuilder sb: result)
+            out.println(sb.toString());
+        out.close();
     }
 
-    public List<String> gray(int length) {
-
-        if(length == 0) {
-            List<String> start = new ArrayList<>();
-            start.add("");
-            return start;
+    private List<StringBuilder> dictionary(int n, int depth) {
+        if(depth >= n) {
+            List<StringBuilder> first = new ArrayList<>();
+            first.add(new StringBuilder());
+            return first;
         }
 
-        List<String> s1 = gray(length -1);
-        List<String> s2 = new ArrayList<>(s1);
-        Collections.reverse(s2);
-
-        for(int i=0; i<s1.size(); i++)
-            s1.set(i, "0"+s1.get(i));
-        for(int i=0; i<s2.size(); i++)
-            s2.set(i, "1"+s2.get(i));
-
-        s1.addAll(s2);
-        return s1;
+        depth++;
+        List<StringBuilder> result = new ArrayList<>();
+        int counter = 1;
+        while(counter <= n) {
+            List<StringBuilder> response = dictionary(n, depth);
+            for(int j=0; j<response.size(); j++)
+                response.set(j, response.get(j).insert(0, " ").insert(0, counter));
+            result.addAll(response);
+            counter++;
+        }
+        return result;
     }
 
 }
