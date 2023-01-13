@@ -11,23 +11,32 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
-        solve('A', 'B', 'C', n);
+        solve(n);
     }
 
-    int count = 1;
-    public void solve(char from, char to, char help, int n) {
+    public void solve(int n) {
+        gray(n).forEach(str -> System.out.println(str));
+    }
 
+    public List<String> gray(int length) {
 
-        if(n == 1) {
-            System.out.println(String.format("%d %c %c", count++, from, to));
-            return;
+        if(length == 0) {
+            List<String> start = new ArrayList<>();
+            start.add("");
+            return start;
         }
 
-        solve(from, help, to, n-1);
+        List<String> s1 = gray(length -1);
+        List<String> s2 = new ArrayList<>(s1);
+        Collections.reverse(s2);
 
-        System.out.println(String.format("%d %c %c", count++, from, to));
+        for(int i=0; i<s1.size(); i++)
+            s1.set(i, "0"+s1.get(i));
+        for(int i=0; i<s2.size(); i++)
+            s2.set(i, "1"+s2.get(i));
 
-        solve(help, to, from, n-1);
-
+        s1.addAll(s2);
+        return s1;
     }
+
 }
