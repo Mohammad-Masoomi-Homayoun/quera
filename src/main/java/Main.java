@@ -1,5 +1,4 @@
-import java.io.OutputStream;
-import java.io.PrintWriter;
+
 import java.util.*;
 
 public class Main {
@@ -13,36 +12,29 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
-        solve(n);
+        long[] arr = new long[n];
+        for(int i=0; i<n; i++)
+            arr[i] = in.nextLong();
+
+        System.out.println(solve(n, arr));
     }
 
-    public void solve(int n) {
-        List<StringBuilder> result = dictionary(n, 0);
-        OutputStream outputStream = System.out;
-        PrintWriter out = new PrintWriter(outputStream);
-        for(StringBuilder sb: result)
-            out.println(sb.toString());
-        out.close();
-    }
+    public long solve(int n, long[] arr) {
 
-    private List<StringBuilder> dictionary(int n, int depth) {
-        if(depth >= n) {
-            List<StringBuilder> first = new ArrayList<>();
-            first.add(new StringBuilder());
-            return first;
-        }
+        long arrSum = Arrays.stream(arr).sum();
 
-        depth++;
-        List<StringBuilder> result = new ArrayList<>();
-        int counter = 1;
-        while(counter <= n) {
-            List<StringBuilder> response = dictionary(n, depth);
-            for(int j=0; j<response.size(); j++)
-                response.set(j, response.get(j).insert(0, " ").insert(0, counter));
-            result.addAll(response);
-            counter++;
+        long min = Long.MAX_VALUE;
+        for(int mask=1; mask< (1<<n) ; mask++) {
+            long sum = 0;
+            for(int j=0; j<n; j++) {
+                if((mask & (1<<j)) != 0)
+                   sum +=arr[j];
+            }
+            long res = Math.abs(arrSum - 2*sum);
+            if(res < min)
+                min = res;
         }
-        return result;
+       return min;
     }
 
 }
