@@ -39,6 +39,7 @@ public class Main {
                 min = tmp;
         }
        return min;
+
     }
 
     public int[] sub(int start, int end, int[] arr) {
