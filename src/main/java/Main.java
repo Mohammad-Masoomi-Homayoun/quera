@@ -11,30 +11,45 @@ public class Main {
     public void readAndSolve() {
 
         Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        long[] arr = new long[n];
+        int n = Integer.parseInt(in.nextLine());
+        String[] arr = new String[n];
         for(int i=0; i<n; i++)
-            arr[i] = in.nextLong();
+            arr[i] = in.nextLine();
 
-        System.out.println(solve(n, arr));
+        int q = Integer.parseInt(in.nextLine());
+        String[] days = new String[q];
+        for(int i=0; i<q; i++)
+            days[i] = in.nextLine();
+        System.out.println(solve(n, arr, q, days));
     }
 
-    public long solve(int n, long[] arr) {
+    public int solve(int n, String[] arr, int q, String[] days) {
 
-        long arrSum = Arrays.stream(arr).sum();
+        int steps = 0;
 
-        long min = Long.MAX_VALUE;
-        for(int mask=1; mask< (1<<n) ; mask++) {
-            long sum = 0;
-            for(int j=0; j<n; j++) {
-                if((mask & (1<<j)) != 0)
-                   sum +=arr[j];
+        String currentOrgan = findLatestOccurence(0, q, new ArrayList<>(Arrays.asList(arr)), days);
+        for(int i=0; i<q; i++) {
+            if(days[i].equalsIgnoreCase(currentOrgan))  {
+                steps++;
+                currentOrgan = findLatestOccurence(i, q, new ArrayList<>(Arrays.asList(arr)), days);
             }
-            long res = Math.abs(arrSum - 2*sum);
-            if(res < min)
-                min = res;
         }
-       return min;
+        return steps;
+    }
+
+    private String findLatestOccurence(int current, int q, List<String> orgs, String[] days) {
+
+        String lateOccurredOrgan = "";
+        for(int i=current; i<q; i++) {
+            if(orgs.contains(days[i])) {
+                orgs.remove(days[i]);
+                if(orgs.size() <2) {
+                    lateOccurredOrgan = orgs.get(0);
+                    break;
+                }
+            }
+        }
+        return lateOccurredOrgan;
     }
 
 }

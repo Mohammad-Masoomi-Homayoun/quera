@@ -2,8 +2,6 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SolutionTest {
@@ -18,8 +16,8 @@ public class SolutionTest {
     @Test
     @DisplayName("test solution")
     public void test() {
-//        assertEquals( 3, solution.solve(18, 15));
-//        assertEquals( 1, solution.solve(3, 11));
-//        assertEquals( 7, solution.solve(14, 21));
+        assertEquals( 1, solution.solve(3, new String[]{"KGB", "Central Intelligence Agency", "Central Intelligence Agency 2"},
+                6, new String[]{"KGB", "Central Intelligence Agency", "Central Intelligence Agency", "Central Intelligence Agency 2",
+                "Central Intelligence Agency 2", "KGB"}));
     }
 }
