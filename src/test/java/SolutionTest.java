@@ -16,8 +16,7 @@ public class SolutionTest {
     @Test
     @DisplayName("test solution")
     public void test() {
-        assertEquals( 1, solution.solve(3, new String[]{"KGB", "Central Intelligence Agency", "Central Intelligence Agency 2"},
-                6, new String[]{"KGB", "Central Intelligence Agency", "Central Intelligence Agency", "Central Intelligence Agency 2",
-                "Central Intelligence Agency 2", "KGB"}));
+        assertEquals( 2, solution.solve(2));
+        assertEquals( 3, solution.solve(3));
     }
 }

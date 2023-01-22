@@ -12,44 +12,18 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
         int n = Integer.parseInt(in.nextLine());
-        String[] arr = new String[n];
-        for(int i=0; i<n; i++)
-            arr[i] = in.nextLine();
-
-        int q = Integer.parseInt(in.nextLine());
-        String[] days = new String[q];
-        for(int i=0; i<q; i++)
-            days[i] = in.nextLine();
-        System.out.println(solve(n, arr, q, days));
+        System.out.println(solve(n));
     }
 
-    public int solve(int n, String[] arr, int q, String[] days) {
+    public long solve(int n) {
 
-        int steps = 0;
+        long mod = 1_000_000_007;
 
-        String currentOrgan = findLatestOccurence(0, q, new ArrayList<>(Arrays.asList(arr)), days);
-        for(int i=0; i<q; i++) {
-            if(days[i].equalsIgnoreCase(currentOrgan))  {
-                steps++;
-                currentOrgan = findLatestOccurence(i, q, new ArrayList<>(Arrays.asList(arr)), days);
-            }
-        }
-        return steps;
+        long[] fib = new long[n+1];
+        fib[0] = 1;
+        fib[1] = 1;
+        for(int i=2; i<=n; i++)
+            fib[i] = (fib[i-1] + fib[i-2]) % mod;
+        return fib[n];
     }
-
-    private String findLatestOccurence(int current, int q, List<String> orgs, String[] days) {
-
-        String lateOccurredOrgan = "";
-        for(int i=current; i<q; i++) {
-            if(orgs.contains(days[i])) {
-                orgs.remove(days[i]);
-                if(orgs.size() <2) {
-                    lateOccurredOrgan = orgs.get(0);
-                    break;
-                }
-            }
-        }
-        return lateOccurredOrgan;
-    }
-
 }
