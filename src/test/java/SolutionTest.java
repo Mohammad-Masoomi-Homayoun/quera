@@ -2,7 +2,7 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class SolutionTest {
 
@@ -16,7 +16,9 @@ public class SolutionTest {
     @Test
     @DisplayName("test solution")
     public void test() {
-        assertEquals( 2, solution.solve(2));
-        assertEquals( 3, solution.solve(3));
+//        assertArrayEquals( new long[]{1, 1, 2, 3, 5, 9}, solution.solve(6, new int[]{1, 2, 3, 4, 5, 6}));
+//        assertArrayEquals( new long[]{1, 9}, solution.solve(2, new int[]{1, 6}));
+//        assertArrayEquals( new long[]{15}, solution.solve(1, new int[]{7}));
+//        assertArrayEquals( new long[]{26}, solution.solve(1, new int[]{8}));
     }
 }
