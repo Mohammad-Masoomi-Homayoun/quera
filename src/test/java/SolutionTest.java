@@ -3,6 +3,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class SolutionTest {
 
@@ -16,9 +18,9 @@ public class SolutionTest {
     @Test
     @DisplayName("test solution")
     public void test() {
-//        assertArrayEquals( new long[]{1, 1, 2, 3, 5, 9}, solution.solve(6, new int[]{1, 2, 3, 4, 5, 6}));
-//        assertArrayEquals( new long[]{1, 9}, solution.solve(2, new int[]{1, 6}));
-//        assertArrayEquals( new long[]{15}, solution.solve(1, new int[]{7}));
-//        assertArrayEquals( new long[]{26}, solution.solve(1, new int[]{8}));
+        long max = Long.MAX_VALUE;
+        assertEquals( 7, solution.solve(4, 4, new long[][]{{1,1,9,1},{9,1,9,9},{1,1,1,9},{1,1,1,1}}));
+        assertEquals( 10, solution.solve(5, 4, new long[][]{{1,1,9,1},{9,1,9,9},{1,1,1,9},{1,9,9,9},{1,1,1,1}}));
+        assertEquals( 1, solution.solve(1, 1, new long[][]{{1}}));
     }
 }

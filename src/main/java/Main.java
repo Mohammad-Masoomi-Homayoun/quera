@@ -11,54 +11,59 @@ public class Main {
     public void readAndSolve() {
 
         Scanner in = new Scanner(System.in);
-        int q = Integer.parseInt(in.nextLine());
-        int[][] arr = new int[q][2];
-        int maxN = -1, maxR = -1;
-        for(int i=0; i<q; i++) {
-            int n = in.nextInt();
-            arr[i][0] = n;
-            if(n > maxN)
-               maxN = n;
-            int r = in.nextInt();
-            arr[i][1] = r;
-            if(r > maxR)
-                maxR = r;
+        int n = in.nextInt();
+        int m = in.nextInt();
+
+        long[][] arr = new long[n][m];
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<m; j++) {
+                arr[i][j] = in.nextLong();
+            }
         }
-        long[][] resultTable = makeResultTable(maxN+1, maxR+1);
-        Arrays.stream(solve(q ,resultTable, arr)).forEach(System.out::println);
+        System.out.println(solve(n, m, arr));
     }
 
-    public long[] solve(int q,long[][] resultTable, int[][] arr) {
+    public long solve(int n, int m, long[][] arr) {
 
-        long[] result = new long[q];
+        long max = Long.MAX_VALUE;
+        long[][][] dp = new long[n][m][2];
 
-        for(int i=0; i<q; i++) {
-            result[i] = resultTable[arr[i][0]][arr[i][1]];
-        }
-        return result;
-    }
-
-    long[][] makeResultTable(int maxN, int maxR) {
-
-        long mod = 1000_000_007;
-        long[][] result = new long[maxN][maxR];
-        for(int n = 0; n<maxN; n++) {
-            for(int r=0; r<maxR; r++) {
-                if(r==0) {
-                    result[n][r] = 1;
-                } else if(n == r) {
-                    result[n][r] = 1;
-                } else if(r > n) {
-                    result[n][r] = 0;
-                } else {
-                    result[n][r] = (result[n - 1][r] + result[n - 1][r - 1]) % mod;
-                    if (result[n][r] < 0)
-                        result[n][r] += mod;
-                }
+        for(int i=0; i<n; i++) {
+            for(int j=m-1; j>=0; j--) {
+                if(i==0 && j==0) {
+                    dp[i][j][0] = arr[i][j];
+                } else if(i==0) {
+                    dp[i][j][0] = max;
+                } else if(j==0) {
+                    dp[i][j][0] = min(dp[i-1][j][1], dp[i-1][j][0],dp[i][j+1][0]) + arr[i][j];
+                } else if(j+1==m) {
+                    dp[i][j][0] = min(dp[i-1][j][1], dp[i-1][j][0],max) + arr[i][j];
+                } else
+                    dp[i][j][0] = min(dp[i - 1][j][1], dp[i - 1][j][0], dp[i][j + 1][0]) + arr[i][j];
+            }
+            for(int j=0; j<m; j++) {
+                if(i==0 && j==0) {
+                    dp[i][j][1] = arr[i][j];
+                } else if(i==0) {
+                    dp[i][j][1] = dp[i][j-1][1] + arr[i][j];
+                } else if(j==0) {
+                    dp[i][j][1] = min(dp[i-1][j][1], dp[i-1][j][0],max) + arr[i][j];
+                } else if(j+1==m) {
+                    dp[i][j][1] = min(dp[i-1][j][1], dp[i-1][j][0],dp[i][j-1][1]) + arr[i][j];
+                } else
+                    dp[i][j][1] = min(dp[i - 1][j][1], dp[i - 1][j][0], dp[i][j - 1][1]) + arr[i][j];
             }
         }
 
-        return result;
+        return dp[n-1][m-1][1];
     }
 
+    private long min(long a, long b, long c) {
+        if(a <= b && a <= c) {
+            return a;
+        } else if(b<= a && b <=c) {
+            return b;
+        }
+        return c;
+    }
 }
