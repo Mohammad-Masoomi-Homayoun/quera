@@ -23,39 +23,11 @@ public class SolutionTest {
     @Test
     @DisplayName("test solution")
     public void test() {
-        Main.Input[] inputs = new Main.Input[4];
-        inputs[0] = solution.makeInput(1, Arrays.asList(100));
-        inputs[1] = solution.makeInput(3, Arrays.asList(1,2,3));
-        inputs[2] = solution.makeInput(2, Arrays.asList(2,10));
-        inputs[3] = null;
-        assertEquals( "021", solution.solve(3, 11, inputs));
+        assertEquals( "ktan", solution.solve(new char[]{'k','a','t','a','n','a'}, new char[]{'y','e','k','t','a','n','e','h'}));
+        assertEquals( "kmd", solution.solve(new char[]{'k','m','i','d'}, new char[]{'k','o','m','o','d'}));
+        assertEquals( "abc", solution.solve(new char[]{'a','a','a','b','c'}, new char[]{'a','b','b','b','c'}));
+        assertEquals( "ac", solution.solve(new char[]{'n','a','t','g','c'}, new char[]{'a','b','b','b','c'}));
+        assertEquals( "a", solution.solve(new char[]{'n','a'}, new char[]{'a','b','b','b','c'}));
 
-        inputs = new Main.Input[4];
-        inputs[0] = solution.makeInput(3, Arrays.asList(1,1,1));
-        inputs[1] = solution.makeInput(3, Arrays.asList(1,1,1));
-        inputs[2] = solution.makeInput(3, Arrays.asList(1,1,1));
-        inputs[3] = null;
-        assertEquals( "200", solution.solve(3, 3, inputs));
-
-        inputs = new Main.Input[4];
-        inputs[0] = solution.makeInput(1, Arrays.asList(12));
-        inputs[1] = solution.makeInput(1, Arrays.asList(12));
-        inputs[2] = solution.makeInput(1, Arrays.asList(12));
-        inputs[3] = null;
-        assertEquals( "000", solution.solve(3, 11, inputs));
-
-        inputs = new Main.Input[4];
-        inputs[0] = solution.makeInput(3, Arrays.asList(1, 19, 10));
-        inputs[1] = solution.makeInput(6, Arrays.asList(1,1,1,1,1,1));
-        inputs[2] = solution.makeInput(1, Arrays.asList(12));
-        inputs[3] = null;
-        assertEquals( "020", solution.solve(3, 6, inputs));
-
-        inputs = new Main.Input[4];
-        inputs[0] = solution.makeInput(3, Arrays.asList(1, 19, 10));
-        inputs[1] = solution.makeInput(4, Arrays.asList(1,1,1,1));
-        inputs[2] = solution.makeInput(6, Arrays.asList(1,1,1,1,1,1));
-        inputs[3] = null;
-        assertEquals( "002", solution.solve(3, 6, inputs));
     }
 }
