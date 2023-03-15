@@ -1,7 +1,6 @@
 
 
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.*;
 
 import static java.lang.Math.max;
@@ -21,61 +20,71 @@ public class Main {
 //        Scanner in = new Scanner(is);
 
         Scanner in = new Scanner(System.in);
-        String Sstr = in.nextLine();
-        String Pstr = in.nextLine();
-        char[] s = new char[Sstr.length()];
-        char[] p = new char[Pstr.length()];
+        int n = in.nextInt();
+        int k = in.nextInt();
 
-        for(int i=0; i<s.length; i++) {
-            s[i] = Sstr.charAt(i);
-        }
-
-        for(int i=0; i<p.length; i++) {
-            p[i] = Pstr.charAt(i);
-        }
-
-        System.out.println(solve(s, p));
+        System.out.println(solve(n, k));
     }
 
-    public String solve(char[] s, char[] p) {
+    public int solve(int n, int k) {
 
-        int sLen = s.length + 1;
-        int pLen = p.length + 1;
-        int[][] dp = new int[pLen][sLen];
-        char[][] dpLetters = new char[pLen][sLen]; // d: diagonal - u: up - l: left
+        result = 0;
+        permute("", n, k);
+        return result;
+    }
 
-        for(int i=1; i<pLen; i++) {
-            for(int j=1; j<sLen; j++) {
-                if(dp[i-1][j] >= dp[i][j-1]) {
-                    dp[i][j] = dp[i-1][j];
-                    dpLetters[i][j] = 'u';
-                } else {
-                    dp[i][j] = dp[i][j-1];
-                    dpLetters[i][j] = 'l';
-                }
-                if(p[i-1] == s[j-1]) {
-                    dp[i][j] = dp[i-1][j-1]+1;
-                    dpLetters[i][j] = 'd';
-                }
+    int result = 0;
+
+    private void permute(String perm, int n, int k) {
+
+        if(perm.length() > n)
+            return;
+
+        if(hasDuplicated(perm) || hasMoreThanKMisplace(perm, k))
+            return;
+
+        if(perm.length() == n) {
+            if(hasKMisplace(perm, k)) {
+                result++;
             }
-        }
-        int i = pLen-1;
-        int j = sLen-1;
-        StringBuilder result = new StringBuilder();
-
-        while (i>0 && j>0) {
-            if(dpLetters[i][j] == 'd') {
-                result.insert(0, s[j-1]);
-                i -= 1;
-                j -= 1;
-            } else if(dpLetters[i][j] == 'l') {
-                j -= 1;
-            } else {
-                i -=1;
-            }
+            return;
         }
 
-        System.out.println(dp[pLen-1][sLen-1]);
-        return result.toString();
+        for (int i = 1; i <= n; i++) {
+            permute(perm + "" + i, n, k);
+        }
+        return;
+    }
+
+    private boolean hasMoreThanKMisplace(String perm, int k) {
+        return countMisplace(perm) > k;
+    }
+
+    private boolean hasKMisplace(String perm, int k) {
+        return countMisplace(perm) == k;
+    }
+
+    private int countMisplace(String perm) {
+
+        if(perm.length() < 2)
+            return 0;
+
+        int[] members = new int[perm.length()];
+        for(int i=0; i<perm.length(); i++) {
+            members[i] = Integer.parseInt(perm.charAt(i)+"");
+        }
+
+        int count = 0;
+        for(int i=0; i<perm.length(); i++) {
+            for(int j=i+1; j<perm.length(); j++) {
+                if(members[i] > members[j])
+                    count++;
+            }
+        }
+        return count;
+    }
+
+    private boolean hasDuplicated(String perm) {
+        return perm.codePoints().distinct().count() != perm.length();
     }
 }

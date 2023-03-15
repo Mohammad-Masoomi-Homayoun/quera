@@ -23,11 +23,8 @@ public class SolutionTest {
     @Test
     @DisplayName("test solution")
     public void test() {
-        assertEquals( "ktan", solution.solve(new char[]{'k','a','t','a','n','a'}, new char[]{'y','e','k','t','a','n','e','h'}));
-        assertEquals( "kmd", solution.solve(new char[]{'k','m','i','d'}, new char[]{'k','o','m','o','d'}));
-        assertEquals( "abc", solution.solve(new char[]{'a','a','a','b','c'}, new char[]{'a','b','b','b','c'}));
-        assertEquals( "ac", solution.solve(new char[]{'n','a','t','g','c'}, new char[]{'a','b','b','b','c'}));
-        assertEquals( "a", solution.solve(new char[]{'n','a'}, new char[]{'a','b','b','b','c'}));
+        assertEquals( 2, solution.solve(3, 2));
+        assertEquals( 5, solution.solve(4, 2));
 
     }
 }
