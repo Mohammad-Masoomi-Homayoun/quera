@@ -5,6 +5,7 @@
 //    int no;
 //    List<Node> neighbors = new ArrayList<>();
 //    boolean mark;
+//    Node parent = null;
 //
 //    public Node(int no) {
 //        this.no = no;

@@ -1,3 +1,4 @@
+import javax.sound.midi.Soundbank;
 import java.io.*;
 import java.util.*;
 public class Main {
@@ -27,41 +28,59 @@ public class Main {
             int toPoint = in.nextInt();
             Node a = get(fromPoint, nodes);
             Node b = get(toPoint, nodes);
-            a.getNeighbors().add(b);
-            b.getNeighbors().add(a);
+            a.neighbors.add(b);
+            b.neighbors.add(a);
         }
 
-        if(solve(from, to, nodes)) {
-            System.out.println("YES");
-        } else {
-            System.out.println("NO");
-        }
+        solve(from, to, nodes);
     }
 
-    public boolean solve(int from, int to, Map<Integer, Node> nodes) {
+    private boolean found = false;
+    private StringBuilder foundPath = new StringBuilder();
+    private int pathCount = 0;
+    public String solve(int from, int to, Map<Integer, Node> nodes) {
 
-        found = false;
         Node fromNode = get(from, nodes);
+        fromNode.mark = true;
         Node toNode = get(to, nodes);
-        DFSsearch(fromNode, toNode, nodes);
-        return found;
+        Queue<Node> nodesQueue = new ArrayDeque<>();
+        nodesQueue.add(fromNode);
+        found = false;
+        BFSsearch(nodesQueue, toNode);
+        if(found) {
+            System.out.println(pathCount);
+            System.out.println(foundPath);
+            return foundPath.toString();
+        }
+        System.out.println("-1");
+        return "-1";
     }
 
-    boolean found = false;
+    public void BFSsearch(Queue<Node> nodesQueue, Node goal) {
 
-    private void DFSsearch(Node current, Node goal, Map<Integer, Node> nodes) {
-        if(current.getNo() == goal.getNo()) {
-            found = true;
-            return;
-        }
+        while (nodesQueue.size() > 0) {
+            Node current = nodesQueue.remove();
+            if(current.no == goal.no) {
+                found = true;
+                Node way = current;
+                while(way.parent != null) {
+                    foundPath.insert(0, way.no);
+                    foundPath.insert(0, " ");
+                    pathCount ++;
+                    way = way.parent;
+                }
+                foundPath.insert(0, way.no);
+                return;
+            }
 
-        if(current.mark)
-            return;
+            for (Node node : current.neighbors) {
+                if(node.mark)
+                    continue;
+                node.parent = current;
+                node.mark = true;
+                nodesQueue.add(node);
+            }
 
-        current.mark = true;
-
-        for(Node node : current.getNeighbors()) {
-            DFSsearch(node, goal, nodes);
         }
     }
 
@@ -77,41 +96,13 @@ public class Main {
     }
 
     class Node {
-        int no;
+        int no = 0;
         List<Node> neighbors = new ArrayList<>();
-        boolean mark;
+        boolean mark = false;
+        Node parent = null;
 
         public Node(int no) {
             this.no = no;
-        }
-
-        public Node(int no, List<Node> neighbors) {
-            this.no = no;
-            this.neighbors.addAll(neighbors);
-        }
-
-        public int getNo() {
-            return no;
-        }
-
-        public void setNo(int no) {
-            this.no = no;
-        }
-
-        public List<Node> getNeighbors() {
-            return neighbors;
-        }
-
-        public void setNeighbors(List<Node> neighbors) {
-            this.neighbors = neighbors;
-        }
-
-        public boolean isMark() {
-            return mark;
-        }
-
-        public void setMark(boolean mark) {
-            this.mark = mark;
         }
     }
 
