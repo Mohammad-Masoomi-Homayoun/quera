@@ -16,93 +16,68 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
-        int m = in.nextInt();
 
-        int from = in.nextInt();
-        int to = in.nextInt();
+        Map<String, Node> nodes = new HashMap<>();
 
-        Map<Integer, Node> nodes = new HashMap<>();
-
-        for (int i = 0; i < m; i++) {
-            int fromPoint = in.nextInt();
-            int toPoint = in.nextInt();
-            Node a = get(fromPoint, nodes);
-            Node b = get(toPoint, nodes);
-            a.neighbors.add(b);
-            b.neighbors.add(a);
+        for (int i = 0; i < n; i++) {
+            int x = in.nextInt();
+            int y = in.nextInt();
+            Node node = new Node(x, y);
+            findAndSetNeighbors(node, nodes);
+            nodes.put(x+"-"+y, node);
         }
 
-        solve(from, to, nodes);
+        System.out.println(solve(nodes));
     }
 
-    private boolean found = false;
-    private StringBuilder foundPath = new StringBuilder();
-    private int pathCount = 0;
-    public String solve(int from, int to, Map<Integer, Node> nodes) {
-
-        Node fromNode = get(from, nodes);
-        fromNode.mark = true;
-        Node toNode = get(to, nodes);
-        Queue<Node> nodesQueue = new ArrayDeque<>();
-        nodesQueue.add(fromNode);
-        found = false;
-        BFSsearch(nodesQueue, toNode);
-        if(found) {
-            System.out.println(pathCount);
-            System.out.println(foundPath);
-            return foundPath.toString();
-        }
-        System.out.println("-1");
-        return "-1";
-    }
-
-    public void BFSsearch(Queue<Node> nodesQueue, Node goal) {
-
-        while (nodesQueue.size() > 0) {
-            Node current = nodesQueue.remove();
-            if(current.no == goal.no) {
-                found = true;
-                Node way = current;
-                while(way.parent != null) {
-                    foundPath.insert(0, way.no);
-                    foundPath.insert(0, " ");
-                    pathCount ++;
-                    way = way.parent;
-                }
-                foundPath.insert(0, way.no);
-                return;
+    private void findAndSetNeighbors(Node current, Map<String, Node> nodes) {
+        for(Node node : nodes.values()) {
+            if(current.x == node.x || current.y == node.y) {
+                current.neighbors.add(node);
+                node.neighbors.add(current);
             }
-
-            for (Node node : current.neighbors) {
-                if(node.mark)
-                    continue;
-                node.parent = current;
-                node.mark = true;
-                nodesQueue.add(node);
-            }
-
         }
     }
 
-    Node get(int no, Map<Integer, Node> nodes) {
-        if (nodes == null)
-            return null;
-        Node node = nodes.get(no);
-        if(node == null) {
-            node = new Node(no);
-            nodes.put(no, node);
+    public int solve(Map<String, Node> nodes) {
+
+        int countOfElements = 0;
+
+        Node firstUnmark = null;
+        while ((firstUnmark = getFirstUnmark(nodes)) != null ){
+            countOfElements++;
+            DFSsearch(firstUnmark);
         }
-        return node;
+        return countOfElements-1;
+    }
+
+    private void DFSsearch(Node firstUnmark) {
+
+        if(firstUnmark.mark)
+            return;
+        firstUnmark.mark = true;
+        for(Node child : firstUnmark.neighbors) {
+            DFSsearch(child);
+        }
+    }
+
+    private Node getFirstUnmark(Map<String, Node> nodes) {
+        for(Node node : nodes.values()) {
+                if(!node.mark)
+                    return node;
+            }
+        return null;
     }
 
     class Node {
-        int no = 0;
+        int x = -1;
+        int y = -1;
         List<Node> neighbors = new ArrayList<>();
         boolean mark = false;
-        Node parent = null;
 
-        public Node(int no) {
-            this.no = no;
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
     }
 

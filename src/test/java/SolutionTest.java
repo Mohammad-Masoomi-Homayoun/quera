@@ -21,24 +21,22 @@ public class SolutionTest {
     @DisplayName("test solution")
     public void test() {
 
-//        Map<Integer, Node> nodes = new HashMap<>();
-//        Node node1 = new Node(1);
-//        Node node2 = new Node(2);
-//        Node node3 = new Node(3);
-//        Node node4 = new Node(4);
-//        Node node5 = new Node(5);
-//        node1.neighbors.add(node2);
-//        node1.neighbors.add(node3);
-//        node2.neighbors.add(node3);
-//        node3.neighbors.add(node4);
+//        Map<String, Node> nodes = new HashMap<>();
+//        Node node1 = new Node(1, 1);
+//        Node node2 = new Node(3, 1);
+//        Node node3 = new Node(3, 3);
+//        Node node4 = new Node(1, 3);
+//        node1.neighbors.addAll(Arrays.asList(node4, node2));
+//        node2.neighbors.addAll(Arrays.asList(node1, node3));
+//        node3.neighbors.addAll(Arrays.asList(node2, node4));
+//        node4.neighbors.addAll(Arrays.asList(node1, node3));
 //
+//        nodes.put("1-1", node1);
+//        nodes.put("3-1", node1);
+//        nodes.put("3-3", node1);
+//        nodes.put("1-3", node1);
 //
-//        nodes.put(1, node1);
-//        nodes.put(2, node2);
-//        nodes.put(3, node3);
-//        nodes.put(4, node4);
-//
-//        assertEquals("1 3 4", solution.solve(1, 4, nodes));
+//        assertEquals(0, solution.solve(nodes));
 
     }
 }
