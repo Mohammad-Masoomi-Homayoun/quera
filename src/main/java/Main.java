@@ -1,4 +1,3 @@
-import javax.sound.midi.Soundbank;
 import java.io.*;
 import java.util.*;
 public class Main {
@@ -15,69 +14,104 @@ public class Main {
 //        Scanner in = new Scanner(is);
 
         Scanner in = new Scanner(System.in);
+        Map<Integer, Node> nodes = new HashMap<>();
+
         int n = in.nextInt();
 
-        Map<String, Node> nodes = new HashMap<>();
-
-        for (int i = 0; i < n; i++) {
-            int x = in.nextInt();
-            int y = in.nextInt();
-            Node node = new Node(x, y);
-            findAndSetNeighbors(node, nodes);
-            nodes.put(x+"-"+y, node);
+        for (int i = 0; i < n-1; i++) {
+            int from = in.nextInt();
+            int to = in.nextInt();
+            Node fromNode = get(from, nodes);
+            Node toNode = get(to, nodes);
+            setNeighbors(fromNode, toNode, nodes);
         }
 
-        System.out.println(solve(nodes));
+        int q = in.nextInt();
+
+        for (int i = 0; i < q; i++) {
+            int hasFriend = in.nextInt();
+            nodes.get(hasFriend).hasFriend = true;
+        }
+
+        solve(nodes);
     }
 
-    private void findAndSetNeighbors(Node current, Map<String, Node> nodes) {
-        for(Node node : nodes.values()) {
-            if(current.x == node.x || current.y == node.y) {
-                current.neighbors.add(node);
-                node.neighbors.add(current);
+    public Node get(int value, Map<Integer, Node> nodes) {
+        Node node = nodes.get(value);
+        if(node == null) {
+            node = new Node(value);
+            nodes.put(value, node);
+        }
+        return node;
+    }
+
+    private void setNeighbors(Node node1, Node node2, Map<Integer, Node> nodes) {
+        nodes.get(node1.value).neighbors.add(node2);
+        nodes.get(node2.value).neighbors.add(node1);
+    }
+
+    public int solve(Map<Integer, Node> nodes) {
+
+
+        Node first = nodes.get(1);
+        DFS(first, 1);
+        friends.sort((n1, n2) -> (n1.value < n2.value ? -1 : 1));
+        friends.sort((n1, n2) -> (n1.length < n2.length ? -1 : 1));
+        System.out.println(friends.get(0).value);
+        return friends.get(0).value;
+//        Queue<Node> nodesQueue = new ArrayDeque<>();
+//        nodesQueue.add(nodes.get(1));
+//
+//        Node friend = BFSsearch(nodesQueue);
+//        if(friend != null) {
+//            System.out.println(friend.value);
+//            return friend.value;
+//        }
+//        return -1;
+    }
+
+    private Node BFSsearch(Queue<Node> nodeQueue) {
+
+        Node friend = null;
+
+        while(nodeQueue.size() > 0) {
+            Node current = nodeQueue.poll();
+            if(current.hasFriend)  {
+                if(friend == null) friend = current;
+                if(current.value < friend.value) friend = current;
             }
+            if(current.mark) continue;
+            current.mark = true;
+            for(Node neighbor : current.neighbors)
+                nodeQueue.add(neighbor);
         }
+        return friend;
     }
 
-    public int solve(Map<String, Node> nodes) {
+    List<Node> friends = new ArrayList<>();
 
-        int countOfElements = 0;
+    public void DFS(Node current, int depth) {
 
-        Node firstUnmark = null;
-        while ((firstUnmark = getFirstUnmark(nodes)) != null ){
-            countOfElements++;
-            DFSsearch(firstUnmark);
+        if(current.mark) return;
+        if(current.hasFriend)  {
+            current.length = depth;
+            friends.add(current);
         }
-        return countOfElements-1;
-    }
+        current.mark = true;
+        depth += 1;
+        for(Node neighbor : current.neighbors)
+            DFS(neighbor, depth);
 
-    private void DFSsearch(Node firstUnmark) {
-
-        if(firstUnmark.mark)
-            return;
-        firstUnmark.mark = true;
-        for(Node child : firstUnmark.neighbors) {
-            DFSsearch(child);
-        }
-    }
-
-    private Node getFirstUnmark(Map<String, Node> nodes) {
-        for(Node node : nodes.values()) {
-                if(!node.mark)
-                    return node;
-            }
-        return null;
     }
 
     class Node {
-        int x = -1;
-        int y = -1;
+        int value = -1;
         List<Node> neighbors = new ArrayList<>();
         boolean mark = false;
-
-        public Node(int x, int y) {
-            this.x = x;
-            this.y = y;
+        boolean hasFriend = false;
+        int length = 0;
+        public Node(int value) {
+            this.value = value;
         }
     }
 
