@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+
 public class Main {
 
     public static void main(String[] args) throws IOException {
@@ -7,110 +8,69 @@ public class Main {
         solution.readAndSolve();
     }
 
-    public void readAndSolve() throws IOException {
-
-//        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-//        InputStream is = classloader.getResourceAsStream("input10.txt");
-//        Scanner in = new Scanner(is);
+    public void readAndSolve() {
 
         Scanner in = new Scanner(System.in);
-        Map<Integer, Node> nodes = new HashMap<>();
 
-        int n = in.nextInt();
+        int n = Integer.parseInt(in.nextLine());
+        String[] arr = new String[n];
 
-        for (int i = 0; i < n-1; i++) {
-            int from = in.nextInt();
-            int to = in.nextInt();
-            Node fromNode = get(from, nodes);
-            Node toNode = get(to, nodes);
-            setNeighbors(fromNode, toNode, nodes);
+        for (int i = 0; i < n; i++) {
+            arr[i] = in.nextLine();
         }
 
-        int q = in.nextInt();
-
-        for (int i = 0; i < q; i++) {
-            int hasFriend = in.nextInt();
-            nodes.get(hasFriend).hasFriend = true;
-        }
-
-        solve(nodes);
+        System.out.println(solve(n, arr));
     }
 
-    public Node get(int value, Map<Integer, Node> nodes) {
-        Node node = nodes.get(value);
-        if(node == null) {
-            node = new Node(value);
-            nodes.put(value, node);
-        }
-        return node;
-    }
+    public String solve(int n, String[] arr) {
 
-    private void setNeighbors(Node node1, Node node2, Map<Integer, Node> nodes) {
-        nodes.get(node1.value).neighbors.add(node2);
-        nodes.get(node2.value).neighbors.add(node1);
-    }
-
-    public int solve(Map<Integer, Node> nodes) {
-
-
-        Node first = nodes.get(1);
-        DFS(first, 1);
-        friends.sort((n1, n2) -> (n1.value < n2.value ? -1 : 1));
-        friends.sort((n1, n2) -> (n1.length < n2.length ? -1 : 1));
-        System.out.println(friends.get(0).value);
-        return friends.get(0).value;
-//        Queue<Node> nodesQueue = new ArrayDeque<>();
-//        nodesQueue.add(nodes.get(1));
-//
-//        Node friend = BFSsearch(nodesQueue);
-//        if(friend != null) {
-//            System.out.println(friend.value);
-//            return friend.value;
-//        }
-//        return -1;
-    }
-
-    private Node BFSsearch(Queue<Node> nodeQueue) {
-
-        Node friend = null;
-
-        while(nodeQueue.size() > 0) {
-            Node current = nodeQueue.poll();
-            if(current.hasFriend)  {
-                if(friend == null) friend = current;
-                if(current.value < friend.value) friend = current;
+        Node start = new Node("");
+        Node current = start;
+        for (int i = 0; i < n; i++) {
+            if(isForward(arr[i])) {
+                if(current.next != null)
+                    current = current.next;
+            } else if(isBackward(arr[i])) {
+                if(current.previous != null)
+                    current = current.previous;
+            } else if(current != null) {
+                Node tmp = new Node(extract(arr[i]));
+                if (current.next != null) {
+                    tmp.next = current.next;
+                    current.next.previous = tmp;
+                }
+                current.next = tmp;
+                tmp.previous = current;
+                current = tmp;
             }
-            if(current.mark) continue;
-            current.mark = true;
-            for(Node neighbor : current.neighbors)
-                nodeQueue.add(neighbor);
         }
-        return friend;
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        while (start != null) {
+            stringBuilder.append(start.value);
+            start = start.next;
+        }
+        return stringBuilder.toString();
     }
 
-    List<Node> friends = new ArrayList<>();
+    private String extract(String s) {
+        return s.charAt(s.length()-1)+"";
+    }
 
-    public void DFS(Node current, int depth) {
+    private boolean isBackward(String s) {
+        return s.equals("-");
+    }
 
-        if(current.mark) return;
-        if(current.hasFriend)  {
-            current.length = depth;
-            friends.add(current);
-        }
-        current.mark = true;
-        depth += 1;
-        for(Node neighbor : current.neighbors)
-            DFS(neighbor, depth);
-
+    private boolean isForward(String s) {
+        return s.equals("+");
     }
 
     class Node {
-        int value = -1;
-        List<Node> neighbors = new ArrayList<>();
-        boolean mark = false;
-        boolean hasFriend = false;
-        int length = 0;
-        public Node(int value) {
+        String value;
+        Node next;
+        Node previous;
+        public Node(String value) {
             this.value = value;
         }
     }
