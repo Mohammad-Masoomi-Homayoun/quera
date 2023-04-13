@@ -12,67 +12,42 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
 
-        int n = Integer.parseInt(in.nextLine());
-        String[] arr = new String[n];
+        int n = in.nextInt();
+        int q = in.nextInt();
+
+        int[] arr = new int[n];
 
         for (int i = 0; i < n; i++) {
-            arr[i] = in.nextLine();
+            arr[i] = in.nextInt();
         }
 
-        System.out.println(solve(n, arr));
-    }
-
-    public String solve(int n, String[] arr) {
-
-        Node start = new Node("");
-        Node current = start;
-        for (int i = 0; i < n; i++) {
-            if(isForward(arr[i])) {
-                if(current.next != null)
-                    current = current.next;
-            } else if(isBackward(arr[i])) {
-                if(current.previous != null)
-                    current = current.previous;
-            } else if(current != null) {
-                Node tmp = new Node(extract(arr[i]));
-                if (current.next != null) {
-                    tmp.next = current.next;
-                    current.next.previous = tmp;
-                }
-                current.next = tmp;
-                tmp.previous = current;
-                current = tmp;
-            }
+        int[][] questions = new int[q][2];
+        for (int i = 0; i < q; i++) {
+            questions[i][0] = in.nextInt();
+            questions[i][1] = in.nextInt();
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
+        long[] result = solve(n, arr, q, questions);
+        Arrays.stream(result).forEach(System.out::println);
+    }
 
-        while (start != null) {
-            stringBuilder.append(start.value);
-            start = start.next;
+    public long[] solve(int n, int[] arr, int q, int[][] questions) {
+
+        long[] sums = new long[n+1];
+        sums[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            sums[i] = sums[i-1] + arr[i-1];
         }
-        return stringBuilder.toString();
-    }
 
-    private String extract(String s) {
-        return s.charAt(s.length()-1)+"";
-    }
-
-    private boolean isBackward(String s) {
-        return s.equals("-");
-    }
-
-    private boolean isForward(String s) {
-        return s.equals("+");
-    }
-
-    class Node {
-        String value;
-        Node next;
-        Node previous;
-        public Node(String value) {
-            this.value = value;
+        long[] result = new long[q];
+        for (int i = 0; i < q; i++) {
+            if(questions[i][1] == 1000000)
+                System.out.println();
+            result[i] = sums[questions[i][1]+1] - sums[questions[i][0]];
         }
+
+        return result;
     }
+
 
 }
