@@ -16,67 +16,60 @@ public class Main {
         int n = in.nextInt();
         int q = in.nextInt();
 
-        int[][] arr = new int[n][n];
+        int[] arr = new int[n];
 
         for (int i = 0; i < n; i++) {
-            arr[i][0] = i+1;
+            arr[i] = in.nextInt();
         }
 
+        int[][] questions = new int[q][2];
         for (int i = 0; i < q; i++) {
-            int command = in.nextInt();
-            if(command == 1) {
-                int a = in.nextInt() -1;
-                int b = in.nextInt() -1;
-                pushElements(arr[a], arr[b]);
-            } else if(command == 2) {
-                int c = in.nextInt() -1;
-                printLength(arr[c]);
-            } else if(command == 3) {
-                int d = in.nextInt() -1;
-                printElements(arr[d]);
-            }
+            int x = in.nextInt();
+            int y = in.nextInt();
+            questions[i][0] = x;
+            questions[i][1] = y;
         }
-    }
 
-    private void printElements(int[] d) {
-        int[] tmp = d.clone();
-        Arrays.sort(tmp);
-        tmp = Arrays.stream(tmp).filter(x->x!=0).toArray();
-        if(tmp.length == 0) {
-            System.out.println("-1");
-            return;
-        }
-        for( int i =0; i< tmp.length ; i++) {
-            System.out.print(tmp[i] + " ");
-        }
-        System.out.println();
-    }
-
-    private void printLength(int[] c) {
-        int counter = 0;
-        while (counter < c.length && c[counter] != 0) {
-            counter++;
-        }
-        System.out.println(counter);
-    }
-
-    private void pushElements(int[] a, int[] b) {
-        int counter = 0;
-        while (counter < b.length && b[counter] != 0) {
-           counter++;
-        }
-        int startIndex = counter;
-        counter = 0;
-        while (counter < a.length && a[counter] != 0) {
-            b[startIndex++] = a[counter];
-            a[counter] = 0;
-            counter++;
-        }
+        long[] result = solve(n, arr, q, questions);
+        for(int i=0; i<result.length; i++)
+            System.out.println(result[i]);
     }
 
     public long[] solve(int n, int[] arr, int q, int[][] questions) {
 
-        return new long[1];
+        long[] result = new long[q];
+        int upper = (int) log2(n) + 1;
+        int rmq[][] = new int[upper][n];
+
+        for(int i=0; i<n; i++) {
+            rmq[0][i] = arr[i];
+        }
+
+        for(int k=1; k<upper; k++) {
+            int bound = (int) Math.pow(2, k-1);
+            for (int i = 0; i < n; i++) {
+                if(i + bound < n)
+                    rmq[k][i] = Math.min(rmq[k-1][i], rmq[k-1][i+bound]);
+                else
+                    rmq[k][i] = rmq[k-1][i];
+            }
+        }
+
+        for (int i = 0; i < q; i++) {
+            int l = questions[i][0];
+            int r = questions[i][1];
+            int t = (int) Math.floor(log2(r-l));
+            result[i] = Math.min(rmq[t][l], rmq[t][r - (int) Math.pow(2, t) + 1]);
+        }
+
+        return result;
+    }
+
+
+    public long log2(long n) {
+        if(n == 0)
+            return 0;
+        return (long)(Math.log(n) / Math.log(2));
     }
 
 
