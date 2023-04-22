@@ -20,13 +20,14 @@ public class SolutionTest {
     @DisplayName("test solution")
     public void test() {
 
-        int n = 7;
-        int q = 3;
-        int[] arr = new int[]{2, 1, 5, 4, 10, 2, 0};
-        int[][] questions = new int [][]{{0,6},{2,4},{4,4}};
-        long[] result = new long[]{0, 4, 10};
+        int n = 5;
+        int[] arr = new int[]{ 1, 3, 1, 2,3};
 
-        assertArrayEquals(result, solution.solve(n, arr, q, questions));
+        assertEquals(3, solution.solve(n, arr));
+
+        n = 7;
+        arr = new int[]{5 ,7 ,3 ,3 ,7 ,5 ,3};
+        assertEquals(7, solution.solve(n, arr));
 
     }
 }
