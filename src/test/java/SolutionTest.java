@@ -17,17 +17,17 @@ public class SolutionTest {
     }
 
     @Test
-    @DisplayName("test solution")
+    @DisplayName("test the solution")
     public void test() {
 
-        int n = 5;
-        int[] arr = new int[]{ 1, 3, 1, 2,3};
+        int n = 4;
+        long k = 1;
+        long[][] arr = new long[][] {{1, 1},{0, 1},{4, 0},{5, 1}};
 
-        assertEquals(3, solution.solve(n, arr));
+        assertEquals(2, solution.solve(n, k, arr));
 
-        n = 7;
-        arr = new int[]{5 ,7 ,3 ,3 ,7 ,5 ,3};
-        assertEquals(7, solution.solve(n, arr));
+//        solution.mergeSort(arr, 0, 3);
+//        System.out.println("check result");
 
     }
 }
